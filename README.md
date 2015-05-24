@@ -1,5 +1,6 @@
 # Reminder
 Shows a message box with a predefined message at a predefined time to remind you.
+
 ![Remind message](https://raw.github.com/ueffel/reminder/master/screenshot1.png)
 
 # Compile
@@ -31,4 +32,5 @@ to remind you of "Message" at 13:37. (If it is already past today then the next 
 
 ## GUI
 Just start reminder.exe
+
 ![Set up reminder](https://raw.github.com/ueffel/reminder/master/screenshot1.png)
