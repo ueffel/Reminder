@@ -1,7 +1,7 @@
 # Reminder
 Shows a message box with a predefined message at a predefined time to remind you.
 
-![Remind message](https://raw.github.com/ueffel/reminder/master/screenshot1.png)
+![Remind message](https://raw.github.com/ueffel/reminder/master/screenshot2.png)
 
 # Compile
 ```
