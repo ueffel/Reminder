@@ -15,6 +15,7 @@ public class reminder
 	private static Label checkLabel;
 	private static TextBox timeBox;
 	private static TextBox messageBox;
+	private static NotifyIcon notIcon;
 
 	private static void startGUI()
 	{
@@ -95,6 +96,8 @@ public class reminder
 
 	private static void onClose_evt(object sender, EventArgs e)
 	{
+		if (notIcon != null)
+			notIcon.Dispose();
 		Environment.Exit(0);
 	}
 
@@ -148,9 +151,11 @@ public class reminder
 
 	public static void Main(string[] args)
 	{
-		FreeConsole();
 		if (args.Length == 0)
+		{
+			FreeConsole();
 			startGUI();
+		}
 
 		for(int i = 0; i < args.Length; i++)
 		{
@@ -175,22 +180,38 @@ public class reminder
 
 		if (remindTime.CompareTo(DateTime.Now) <= 0)
 		{
-			MessageBox.Show("Nope", "Reminder", MessageBoxButtons.OK,
-				MessageBoxIcon.Exclamation);
-			Main(new string[0]);
+			if (args.Length == 0)
+			{
+				MessageBox.Show("Nope", "Reminder", MessageBoxButtons.OK,
+					MessageBoxIcon.Exclamation);
+				Main(args);
+			}
+			else
+			{
+				Console.WriteLine("Nope");
+				Environment.Exit(1);
+			}
 		}
 
 		System.Threading.Timer t = new System.Threading.Timer(
 			x =>
 			{
-				MessageBox.Show(remindTime.ToString("HH:mm:ss")
-						+ " - " + message, "Reminder", MessageBoxButtons.OK,
+				MessageBox.Show(remindTime.ToString("HH:mm:ss")	+ " - "
+					+ message, "Reminder", MessageBoxButtons.OK,
 					MessageBoxIcon.Information);
+				if (notIcon != null)
+					notIcon.Dispose();
 				Environment.Exit(0);
 			}, null, remindTime.Subtract(DateTime.Now),
 			Timeout.InfiniteTimeSpan);
 
-		while (true)
-			Thread.Sleep(500);
+		notIcon = new NotifyIcon();
+		notIcon.Text = "Reminding you @ " + remindTime.ToString("HH:mm:ss")
+			+ " " + message;
+		notIcon.Icon = new Icon(SystemIcons.Information, 20, 20);
+		MenuItem exitItem = new MenuItem("Exit", new EventHandler(onClose_evt));
+		notIcon.ContextMenu = new ContextMenu(new MenuItem[] {exitItem});
+		notIcon.Visible = true;
+		Application.Run();
 	}
 }
